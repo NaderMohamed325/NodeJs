@@ -89,3 +89,69 @@ Choosing between synchronous and asynchronous methods depends on the size of the
 
 ---
 
+# Node.js HTTP Server
+
+## Overview
+
+The server listens on port `8000` and responds with a specific message when the `/overview` URL path is requested. For any other URL paths, the server responds with a `404` error and a "Page Not Found" message.
+
+### Import the HTTP Module
+
+```js
+const http = require('http');
+```
+
+- The `http` module is a built-in Node.js module that allows you to create HTTP servers and make requests. It provides the necessary functionality to set up and handle HTTP requests and responses.
+
+### Create the HTTP Server
+
+```js
+const server = http.createServer((req, res) => {
+    const pathname = req.url;
+```
+
+- `http.createServer()` is a method that creates an HTTP server. The function passed as a parameter to `createServer()` is a request handler that will be invoked every time a request is made to the server. It receives two arguments: `req` (request) and `res` (response).
+
+- `req.url` is used to access the URL path of the incoming request. This determines which page or resource the client is trying to access.
+
+### Handle the `/overview` Path
+
+```js
+if (pathname === '/overview') {
+    res.end('This is the overview page');
+}
+```
+
+- If the request URL (`req.url`) matches `/overview`, the server responds with the message "This is the overview page". The `res.end()` method is used to send the response back to the client and end the request.
+
+### Handle Other Paths (404)
+
+```js
+else {
+    res.writeHead(404, {
+        'Content-type': 'text/html',
+    });
+    res.end("<h1>Page Not found<h1>");
+}
+```
+
+- If the URL doesn't match `/overview`, the server responds with a `404 Not Found` error. `res.writeHead(404)` sets the HTTP status code to `404`, and the second argument defines the content type (in this case, HTML).
+  
+- Then, `res.end()` sends an HTML message indicating that the page was not found.
+
+### Start the Server
+
+```js
+server.listen(8000, '127.0.0.1', () => {
+    console.log("Listening to port 8000");
+});
+```
+
+- The `server.listen()` method starts the server on the specified port (`8000`) and host (`127.0.0.1`, which is the local machine). When the server starts, it will log a message to the console: "Listening to port 8000".
+
+## Conclusion
+
+This simple Node.js HTTP server demonstrates how to create a basic server, handle routing for different URL paths, and send HTTP responses with different status codes. You can extend this server by adding more paths, handling different HTTP methods (GET, POST, etc.), or integrating a template engine for dynamic content.
+
+---
+
